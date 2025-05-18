@@ -1,0 +1,1046 @@
+{
+  "name": "Aimee Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an intelligent assistant.\nYour task is to retrive all the files fron drive folder and provide me with the file name and respective id.\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        980,
+        -40
+      ],
+      "id": "25506e54-2e9b-405d-a45d-7c2eb72b0ea0",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        680,
+        480
+      ],
+      "id": "bbc45392-cbe1-4003-a9ca-7dcf238998aa",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "ru8PJrQQD3W6EGob",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "limit": 50,
+        "queryString": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Search_Query', ``, 'string') }}",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "filter": {
+          "whatToSearch": "files"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTool",
+      "typeVersion": 3,
+      "position": [
+        1040,
+        500
+      ],
+      "id": "21610b1f-97f5-457b-9e0c-3a7aa2effb21",
+      "name": "Google Drive2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "WoLtS03HQIEa2ftV",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -920,
+        -240
+      ],
+      "id": "abc46dd6-786b-4135-a058-867ca0c45f2d",
+      "name": "Telegram Trigger",
+      "webhookId": "7364c7f1-1c77-4d33-9846-4613cf30f8f3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=1",
+        "contextWindowLength": 1
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        880,
+        500
+      ],
+      "id": "45bd757d-02d3-49b2-983a-1a87c9c62a0b",
+      "name": "Simple Memory",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "unit": "minutes"
+            }
+          ]
+        },
+        "filters": {
+          "readStatus": "unread"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1140,
+        100
+      ],
+      "id": "edcafe72-86e6-44d9-b150-c6569f16f4f2",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KiHc6EpzN17n5FSh",
+          "name": "Aimee Gmail account "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "=Subject: {{ $json.Subject }}\nEmail body: {{ $json.snippet }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "Promotions",
+              "description": "This is any email looking to sell me things"
+            },
+            {
+              "category": "Social",
+              "description": "Any email from a social media site like YouTube or Facebook or Instagram"
+            },
+            {
+              "category": "Personal",
+              "description": "An email sent from a friend or a family members or something personal to me outside of work"
+            },
+            {
+              "category": "Receipts",
+              "description": "These are transaction emails for receipts"
+            },
+            {
+              "category": "Misc",
+              "description": "Anything that doesn't fall within the other categories"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        100
+      ],
+      "id": "58b3e5f8-e6d0-4338-a7c1-f51d656dde12",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "labelIds": [
+          "CATEGORY_PROMOTIONS"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -140,
+        -380
+      ],
+      "id": "6e5d7b2e-9f42-43ea-8862-b4083d91bacb",
+      "name": "PROMOTIONS",
+      "webhookId": "f546eda8-46ce-42e3-a0de-047ee73a9b33",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KiHc6EpzN17n5FSh",
+          "name": "Aimee Gmail account "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "labelIds": [
+          "CATEGORY_SOCIAL"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -140,
+        -200
+      ],
+      "id": "e157711b-a875-4bd0-9b51-052babd803db",
+      "name": "Social",
+      "webhookId": "f546eda8-46ce-42e3-a0de-047ee73a9b33",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KiHc6EpzN17n5FSh",
+          "name": "Aimee Gmail account "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "labelIds": [
+          "Label_3"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -140,
+        0
+      ],
+      "id": "fbd55a93-836d-4b89-b261-51e34a87d92c",
+      "name": "PERSONAL",
+      "webhookId": "f546eda8-46ce-42e3-a0de-047ee73a9b33",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KiHc6EpzN17n5FSh",
+          "name": "Aimee Gmail account "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1000,
+        340
+      ],
+      "id": "8a624265-45e1-471c-b6a8-32beef388e3e",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "ru8PJrQQD3W6EGob",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $('Gmail Trigger1').item.json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        280,
+        -380
+      ],
+      "id": "7f98822d-f142-4ca3-b777-74e6afc39b7e",
+      "name": "Gmail4",
+      "webhookId": "2d2d23a1-58e2-4eaf-b528-0198bb7513ec",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KiHc6EpzN17n5FSh",
+          "name": "Aimee Gmail account "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        160,
+        440
+      ],
+      "id": "1a7fa733-d4c2-4494-916d-c6f375ab1c43",
+      "name": "Gmail5",
+      "webhookId": "2d2d23a1-58e2-4eaf-b528-0198bb7513ec",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KiHc6EpzN17n5FSh",
+          "name": "Aimee Gmail account "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "labelIds": [
+          "Label_3"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -140,
+        440
+      ],
+      "id": "b5a4e06d-0439-4b1c-af00-977b22072f19",
+      "name": "MISC",
+      "webhookId": "f546eda8-46ce-42e3-a0de-047ee73a9b33",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KiHc6EpzN17n5FSh",
+          "name": "Aimee Gmail account "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "labelIds": [
+          "Label_2"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -140,
+        240
+      ],
+      "id": "b32d37ec-e791-48a2-b8de-e2aa6b1ba329",
+      "name": "RECEIPTS",
+      "webhookId": "f546eda8-46ce-42e3-a0de-047ee73a9b33",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KiHc6EpzN17n5FSh",
+          "name": "Aimee Gmail account "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        3440,
+        -80
+      ],
+      "id": "499aa1f8-5fd1-452f-aac9-974bf6f7d0fe",
+      "name": "Gmail",
+      "webhookId": "1f08f49a-ee73-4e81-a74d-3651f1696ca3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KiHc6EpzN17n5FSh",
+          "name": "Aimee Gmail account "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ $json.output.Subject }}",
+        "message": "={{ $json.output['email text'] }}",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {
+                "property": "data"
+              }
+            ]
+          },
+          "threadId": "={{ $('Gmail Trigger').item.json.threadId }}",
+          "sendTo": "={{ $('Google Drive').item.json.output.Email }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        3140,
+        -80
+      ],
+      "id": "0d8bcbc8-887f-4da0-ae55-cbf25e5c18db",
+      "name": "Gmail1",
+      "webhookId": "808cd179-795a-4d16-bf6c-c88ad8730d79",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KiHc6EpzN17n5FSh",
+          "name": "Aimee Gmail account "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.output['file id'] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2880,
+        -80
+      ],
+      "id": "61acae6b-508e-4ad4-944f-0f5db0c13b39",
+      "name": "Google Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "WoLtS03HQIEa2ftV",
+          "name": "Google Drive account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('File', ``, 'string') }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTool",
+      "typeVersion": 3,
+      "position": [
+        1180,
+        360
+      ],
+      "id": "e2cc2c62-fa1f-4b60-8d2c-cb620ca1586e",
+      "name": "Google Drive1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "WoLtS03HQIEa2ftV",
+          "name": "Google Drive account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d7013031-9fb3-4f1d-9875-270046798b32",
+              "leftValue": "={{ $json.output['file id'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "6ee94d36-2852-44fd-9ed6-0b937efc78a6",
+              "leftValue": "={{ $json.output['file id'] }}",
+              "rightValue": "null",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2440,
+        -40
+      ],
+      "id": "bf7bfe86-460d-48fd-8247-629083d085c4",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ $json.output.Subject }}",
+        "message": "={{ $('AI Agent').item.json.output['email text'] }}",
+        "options": {
+          "threadId": "={{ $('Gmail Trigger').item.json.threadId }}",
+          "sendTo": "={{ $json.output.Email }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2960,
+        220
+      ],
+      "id": "182d721e-3514-41a4-b2bd-9fbeb423ab8b",
+      "name": "Gmail2",
+      "webhookId": "808cd179-795a-4d16-bf6c-c88ad8730d79",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KiHc6EpzN17n5FSh",
+          "name": "Aimee Gmail account "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        3260,
+        220
+      ],
+      "id": "d464856f-e99c-498e-878f-e138099d28bc",
+      "name": "Gmail3",
+      "webhookId": "1f08f49a-ee73-4e81-a74d-3651f1696ca3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KiHc6EpzN17n5FSh",
+          "name": "Aimee Gmail account "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an intelligent assistant.\nYour task is to analyze the given email and determine whether the user is requesting a document.\n\nInstructions:\nIf a file with the exact name is found, return that file.\n\nIf no exact match is found, search for the most relevant or similar file names based on the request.\n\nThis includes partial matches or related keywords (e.g., a user may request \"January\" instead of \"January_Invoice\").\n\nThe file name might be simple (e.g., \"April\") without keywords like \"invoice\" or \"statement\" attached.\n\nIf no document request is identified in the email, respond appropriately without suggesting or attaching any files.\n\nIMPORTANT: Before finalizing your response, always check for the closest matching file name using semantic similarity.\n\nAvailable Document Types:\nExample Transaction List Docs\n\nInvoices\n\nOther common types may include statements, summaries, or monthly reports.\n\n\nHere is the email text: {{ $('Text Classifier').item.json.snippet }}\nHere us the user email: {{ $('Gmail Trigger').item.json.From }}\n\nYour final output must strictly follow this JSON format:\n\n{\n\"Email\": \"user email\",\n\"Subject\": \"appropriate subject for the reply email\",\n\"email text\": \"your reply message to the user\",\n\"file id\": \"id of the most relevant file, or null if no file is needed\"\n}\n\n\"file id\" should be the ID of the most relevant file based on your analysis.\n\nIf no file is required, set \"file id\" to null.\n\nOutput Email Example:\nIf file ia found you will craft an email like this \n\"\"\"\nHi Name,\n\nI have attached the most recent transaction list for your review.\n\nKind regards,\nxyz\n\n\"\"\"\notherwise you will say sorry as file not found\n\n\nHere are the retreived docs {{ $json.output }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        1640,
+        -40
+      ],
+      "id": "77b0e391-7d48-4e02-b9c2-195147c2d4ba",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "options": {
+          "dimensions": 1536
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        760
+      ],
+      "id": "bd19d007-093f-4054-b1a0-1758afccc261",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "ru8PJrQQD3W6EGob",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolName": "aimee",
+        "toolDescription": "aimee db",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "aimee",
+          "mode": "list",
+          "cachedResultName": "aimee"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.1,
+      "position": [
+        1300,
+        580
+      ],
+      "id": "7e73b568-d96f-4b54-8bfd-f9525e8b9a39",
+      "name": "Pinecone Vector Store1",
+      "credentials": {
+        "pineconeApi": {
+          "id": "59onNJBR1Fs1VJVp",
+          "name": "PineconeApi account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "prompt": "Instructions:\n--------------\nYour final output must strictly follow this JSON format:\n\n{\n\"Email\": \"user email\",\n\"Subject\": \"appropriate subject for the reply email\",\n\"email text\": \"your reply message to the user\",\n\"file id\": \"id of the most relevant file, or null if no file is needed\"\n}\n\n--------------\nCompletion:\n--------------\n{completion}\n--------------\n\nAbove, the Completion did not satisfy the constraints given in the Instructions.\nError:\n--------------\n{error}\n--------------\n\nPlease try again. Please only respond with an answer that satisfies the constraints laid out in the Instructions:"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "typeVersion": 1,
+      "position": [
+        2040,
+        300
+      ],
+      "id": "fbc8a11f-2a49-4c8c-bef3-91f67fdfb23b",
+      "name": "Auto-fixing Output Parser"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2000,
+        560
+      ],
+      "id": "3686a79b-3a76-4e5d-8809-23b7ffb46905",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "ru8PJrQQD3W6EGob",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"Email\": \"user email\",\n  \"Subject\": \"email subject\",\n  \"email text\": \"email reply text\",\n  \"file id\": \"file id\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        2240,
+        540
+      ],
+      "id": "0a5cd0c9-e7a8-47b1-be64-7a663b7a3669",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1600,
+        400
+      ],
+      "id": "2aac2177-cb2b-4a6e-b715-d0d6997edf8d",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "ru8PJrQQD3W6EGob",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Gmail Trigger": [
+      {
+        "json": {
+          "id": "196db03e1ecb5f57",
+          "threadId": "196db03e1ecb5f57",
+          "snippet": "Hi Aimee, Can you send me MEMARTs document please? Regards, Eric Sent from Outlook",
+          "payload": {
+            "mimeType": "multipart/alternative"
+          },
+          "sizeEstimate": 14309,
+          "historyId": "14686",
+          "internalDate": "1747431184000",
+          "labels": [
+            {
+              "id": "INBOX",
+              "name": "INBOX"
+            },
+            {
+              "id": "UNREAD",
+              "name": "UNREAD"
+            }
+          ],
+          "From": "Eric Balki <altruist3@hotmail.com>",
+          "To": "aimee aibot <aimee@concordpartnership.com>",
+          "Subject": "Document Request"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive2": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        []
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "PROMOTIONS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Social",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PERSONAL",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "RECEIPTS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MISC",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        []
+      ]
+    },
+    "PROMOTIONS": {
+      "main": [
+        [
+          {
+            "node": "Gmail4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MISC": {
+      "main": [
+        [
+          {
+            "node": "Gmail5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PERSONAL": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RECEIPTS": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Social": {
+      "main": [
+        [
+          {
+            "node": "Gmail4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail1": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Gmail1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Google Drive1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail2": {
+      "main": [
+        [
+          {
+            "node": "Gmail3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "75cee256-80a9-4ee9-9014-704c6761a332",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c33e63efcc013168b4ef0175091271696abcff33523d86f31c85ecac60f32ac3"
+  },
+  "id": "Xi6BvlgIq5h8FGEE",
+  "tags": []
+}
