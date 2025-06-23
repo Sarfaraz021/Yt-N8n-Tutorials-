@@ -1,0 +1,641 @@
+{
+  "name": "Social Media Marketing Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tavily.com/extract",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n    \"api_key\": \"{{ $('Tavily API Key').item.json.api_key }}\",\n    \"urls\": [\n        \"{{ $json.Websites }}\"\n    ]\n}",
+        "options": {}
+      },
+      "id": "d617685b-8900-4bc9-bfac-197d621f4427",
+      "name": "Tavily Extract Top Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1080,
+        120
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "035660a9-bb58-4ecb-bad3-7f4d017fa69f",
+              "name": "api_key",
+              "type": "string",
+              "value": "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"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3a74995e-133a-4d66-81ec-4b0b604a5907",
+      "name": "Tavily API Key",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        140,
+        -40
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "### Tavily API Key\nhttps://app.tavily.com/home",
+        "height": 80,
+        "color": 7
+      },
+      "id": "d4eaced7-b9bd-469d-98ec-48d866197fb0",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        140,
+        140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert LinkedIn content creator specializing in AI, digital transformation, and business technology with 8+ years of experience. Your task is to transform web content {{ $json.data[0].results[0].raw_content }} into highly engaging LinkedIn posts that match my professional persona.\n\nYou will create one post based on my persona and voice in german language.\n\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are a helpful assistant you will create LinkedIn post for me with deep research make sure provide me it in clean format so that it can posted direclty on linkedin under 1500 to 1700 characters.\nYou can laern my my professional persona from my these posts  {{ $('Aggregate1').item.json.data[0] }}\n\nMain Instructions: \n1. Make sure that you add 3 lines in the \"my perspective\" Section where you put the news in relation to the current status and challenges of the German Mittelstand. It should always be clear for the reader how the Ai news influence the situation of my target group which is the German Mittelstand.\n\n2. You will always folllow this format:\n# 🧠 Weekly AI News – KW 20\n\nDie Welt der Künstlichen Intelligenz steht nicht still – und du solltest es auch nicht.\n\nHier sind die 4 spannendsten Entwicklungen aus der letzten Woche, die du kennen musst:\n\n---\n\n### 1. 🤯 OpenAI testet GPT-4o mit \"Emotion\"\n\nEin neues Modell namens **GPT-4o** erkennt und erzeugt Sprache mit Emotionen – inklusive Tonfall und Mimik in der Video-Demo.\n\n👉 *Was das bedeutet: Wir bewegen uns mit großen Schritten Richtung „empathischer KI“. Customer Support, Sales und Coaching werden nie wieder gleich sein.*\n\n---\n\n### 2. 💼 Microsoft bringt Copilot für Outlook auf iOS\n\nDer KI-Assistent **Copilot** kommt jetzt auch auf dein iPhone – E-Mails analysieren, beantworten und zusammenfassen unterwegs.\n\n👉 *Perfekt für Führungskräfte, die im Tagesgeschäft Zeit sparen wollen.*\n\n---\n\n### 3. 🧠 Google DeepMind stellt \"AlphaFold 3\" vor\n\nDas Modell revolutioniert die **Proteinvorhersage** und könnte die Medikamentenentwicklung radikal beschleunigen.\n\n👉 *AI trifft Biotech – ein Gamechanger für die Pharmaindustrie.*\n\n---\n\n### 4. 🚀 KI-Startups erhalten 2,6 Mrd. USD Funding in einer Woche\n\nInvestoren setzen weiter massiv auf AI – mit Fokus auf Agenten, vertikale Anwendungen und KI-Sicherheit.\n\n👉 *Der Trend ist klar: Wer KI nur „beobachtet“, wird überholt.*\n\n---\n\n## 🎯 Meine Einschätzung\n\nWas wir gerade sehen, ist nicht inkrementeller Fortschritt – das ist eine neue industrielle Revolution.\n\n**Jetzt ist der Moment, um KI im Unternehmen zu verstehen und sinnvoll zu integrieren.**\n\n---\n\n## 💬 Was davon findest du am spannendsten?\n\nSchreib's in die Kommentare 👇\n\nOder folge mir für den nächsten **Weekly AI News**-Post nächsten Montag.\n\nWenn du KI in deinem Business strategisch einsetzen willst – schick mir eine Nachricht.\n\n3. Below you can find the information about the challenges german SMEs facing at the moment. This information is important for the my prespective section in the output of the post because here you should always build the connection between the weekly AI News and the challanges of german SMEs and what influence it has on german SMEs.\n\n# 🔍 Current Challenges of the German Mittelstand (SMEs)\n\n*AI Readiness, Economic Pressure & the Reality of Digital Transformation*\n\nBased on 20 years of consulting experience with PwC, McKinsey and Bain, here are the **key challenges** currently shaping the German Mittelstand — and how they relate to AI adoption:\n\n---\n\n## 🧩 1. Economic Pressure & Talent Shortage\n\n**Challenge:**\n\n- Rising costs for energy, logistics, and personnel\n- Declining order volumes in core industries (e.g., manufacturing, automotive suppliers)\n- Ongoing **shortage of skilled labor**, especially in digital and technical roles\n\n**Relevance to AI:**\n\n- AI is viewed as a lever to **increase efficiency** and **compensate for workforce gaps**\n- Many businesses hesitate due to lack of **clear business cases** or **in-house expertise**\n\n---\n\n## 🧠 2. Lack of AI Strategy & Use Case Clarity\n\n**Challenge:**\n\n- High uncertainty: *“What can AI actually do for my business?”*\n- No structured AI roadmap or prioritization framework\n- Fear of “pilot projects” that never scale or deliver value\n\n**Relevance to AI:**\n\n- SMEs need practical support to:\n    - Identify high-impact use cases (sales, operations, support, etc.)\n    - Create a **proof of value**\n    - Involve employees early to reduce resistance\n\n---\n\n## 🔐 3. IT Infrastructure & Data Quality Issues\n\n**Challenge:**\n\n- Outdated ERP systems and fragmented IT stacks\n- Poor data availability and inconsistent data quality\n- Strong concerns around data privacy (GDPR), IP security, and cloud usage\n\n**Relevance to AI:**\n\n- AI relies on **clean, structured data** – many SMEs are **not AI-ready**\n- Basic digital groundwork is often missing\n- **On-premise vs. cloud** remains a strategic barrier\n\n---\n\n## 🧍‍♂️ 4. Change Management & Organizational Mindset\n\n**Challenge:**\n\n- AI often seen as hype, threat, or “just another IT thing”\n- Leadership lacks orientation or confidence to move forward\n- Employees fear job loss or lack understanding of AI’s role\n\n**Relevance to AI:**\n\n- Without **strong change communication and internal buy-in**, implementation fails\n- AI transformation requires **leadership commitment and cultural openness**\n- **Enablement programs**, AI coaches, and internal champions are critical\n\n---\n\n## ⚙️ 5. Competitive & Innovation Pressure\n\n**Challenge:**\n\n- Digitally native competitors enter traditional markets\n- Customer expectations are shifting toward speed, personalization, and self-service\n- Global competitors (esp. from China and the US) are **faster in AI adoption**\n\n**Relevance to AI:**\n\n- AI can drive **competitive advantage** – but only if SMEs act fast and strategically\n- The real risk isn’t that AI comes too early — but that the Mittelstand responds too late\nMy assessments should always refer to the problems and challenges of German SMEs.\n\n4.  Ensure each generated post is unique and never repeated. Check the memory or history before generating a new post to avoid duplication.\n\n\nFinal Output Format:\nGive me output in this format:\n{\n  \"Title\": \"Post Title\",\t\n\"First Half Text\": \"First Half Post Content\",\n  \"Second Half Text\": \"Second Half Post Content\"\n}\n\n",
+          "passthroughBinaryImages": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -200,
+        480
+      ],
+      "id": "19e6f189-c0a5-409f-bbbb-9f75f73595e5",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1v4bm8d1hV9WwlO6J6PD-1g9oXhy32ClVcx_T8ohojhM",
+          "mode": "list",
+          "cachedResultName": "Linkedin Content Agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v4bm8d1hV9WwlO6J6PD-1g9oXhy32ClVcx_T8ohojhM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Tabellenblatt1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v4bm8d1hV9WwlO6J6PD-1g9oXhy32ClVcx_T8ohojhM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        440,
+        -40
+      ],
+      "id": "b7278848-6d62-466d-955b-0deb9a539a4f",
+      "name": "Google Sheets2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Zi8iW3R2FLs0css2",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "typeVersion": 1,
+      "position": [
+        20,
+        840
+      ],
+      "id": "c960cbcb-798a-4e0b-8363-b2e336edd223",
+      "name": "Auto-fixing Output Parser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "896ad632-2c5d-4625-b105-2f7f51c6af3a",
+              "name": "Post Title",
+              "value": "={{ $json.output.Title }}",
+              "type": "string"
+            },
+            {
+              "id": "c76dda5b-80a1-4d28-9a74-0f230ad19d9b",
+              "name": "First half Post Text",
+              "value": "={{ $json.output['First Half Text'] }}",
+              "type": "string"
+            },
+            {
+              "id": "027a7d5c-4bd6-4cc0-8a7e-0b1120f36d95",
+              "name": "Second half Post Text",
+              "value": "={{ $json.output['Second Half Text'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        740,
+        480
+      ],
+      "id": "be638665-64cf-4793-acdf-cf2d442d3709",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"Title\": \"Post Title\",\t\n\"First Half Text\": \"First Half Post Content\",\n  \"Second Half Text\": \"Second Half Post Content\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        160,
+        1060
+      ],
+      "id": "9955b678-a324-4163-9814-c321d73d4e57",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        760,
+        -40
+      ],
+      "id": "c419bbcc-58ef-437a-aec7-0ca9685df134",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        340
+      ],
+      "id": "09f6041f-bd24-43c1-a5a6-a7c275ab0ecc",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8df40b31-8255-4752-bd31-9c7250045f1d",
+              "name": "Post 1",
+              "value": "🚀 Mit einem einfachen KI-Katalog in die AI-Welt richtig starten...  Viele Unternehmen spüren den Druck, 𝗷𝗲𝘁𝘇𝘁 𝗲𝘁𝘄𝗮𝘀 𝗺𝗶𝘁 𝗞𝗜 𝘇𝘂 𝗺𝗮𝗰𝗵𝗲𝗻. Sie sehen das Potenzial, haben vielleicht erste Ideen – stehen aber strukturell noch ganz am Anfang. ❌  Deshalb habe ich einen 𝗙𝗿𝗮𝗴𝗲𝗻𝗸𝗮𝘁𝗮𝗹𝗼𝗴 𝗲𝗻𝘁𝘄𝗶𝗰𝗸𝗲𝗹𝘁, der durch die 𝟴 𝘇𝗲𝗻𝘁𝗿𝗮𝗹𝗲𝗻 𝗘𝗿𝗳𝗼𝗹𝗴𝘀𝗳𝗮𝗸𝘁𝗼𝗿𝗲𝗻 für den Start von KI-Projekten führt. Er hilft dabei, systematisch zu prüfen, 𝗼𝗯 𝗲𝘂𝗲𝗿 𝗨𝗻𝘁𝗲𝗿𝗻𝗲𝗵𝗺𝗲𝗻 𝘄𝗶𝗿𝗸𝗹𝗶𝗰𝗵 „𝗔𝗜-𝗿𝗲𝗮𝗱𝘆“ 𝗶𝘀𝘁 – strategisch, technisch und kulturell:  1. 🎯 𝗦𝘁𝗿𝗮𝘁𝗲𝗴𝗶𝗲 𝘂𝗻𝗱 𝗭𝗶𝗲𝗹𝘀𝗲𝘁𝘇𝘂𝗻𝗴 – Gibt es ein klares Ziel und strategischen Fit? 2. 📊 𝗨𝘀𝗲 𝗖𝗮𝘀𝗲𝘀 𝘂𝗻𝗱 𝗣𝗿𝗶𝗼𝗿𝗶𝘀𝗶𝗲𝗿𝘂𝗻𝗴 – Wo liegt der konkrete Mehrwert? 3. 🧠 𝗗𝗮𝘁𝗲𝗻 𝘂𝗻𝗱 𝗜𝗻𝗳𝗿𝗮𝘀𝘁𝗿𝘂𝗸𝘁𝘂𝗿 – Welche Daten stehen zur Verfügung? 4. 👥 𝗢𝗿𝗴𝗮𝗻𝗶𝘀𝗮𝘁𝗶𝗼𝗻 𝘂𝗻𝗱 𝗥𝗼𝗹𝗹𝗲𝗻 – Gibt es ein zentrales KI-Team? 5. 🧬 𝗞𝗼𝗺𝗽𝗲𝘁𝗲𝗻𝘇𝗲𝗻 𝘂𝗻𝗱 𝗖𝗵𝗮𝗻𝗴𝗲 – Wie hoch ist das KI-Verständnis intern? 6. 🚀 𝗜𝗺𝗽𝗹𝗲𝗺𝗲𝗻𝘁𝗶𝗲𝗿𝘂𝗻𝗴 𝘂𝗻𝗱 𝗦𝗸𝗮𝗹𝗶𝗲𝗿𝘂𝗻𝗴 – Wie wird die Wirkung gemessen? 7. ⚖️ 𝗘𝘁𝗵𝗶𝗸 𝘂𝗻𝗱 𝗥𝗲𝗴𝘂𝗹𝗶𝗲𝗿𝘂𝗻𝗴 – Ist das Projekt rechtlich & ethisch sauber aufgestellt? 8. 🤝 𝗥𝗲𝘀𝘀𝗼𝘂𝗿𝗰𝗲𝗻 𝘂𝗻𝗱 𝗣𝗮𝗿𝘁𝗻𝗲𝗿 – Welche Mittel & Partnerschaften stehen bereit?  👉 Der Katalog richtet sich an Geschäftsführer\\:innen, Digitalverantwortliche & Projektleitende – und bietet eine fundierte Grundlage für alles, was danach kommt:  𝗨𝘀𝗲 𝗖𝗮𝘀𝗲 𝗪𝗼𝗿𝗸𝘀𝗵𝗼𝗽𝘀, 𝗧𝗿𝗮𝗶𝗻𝗶𝗻𝗴𝘀 𝗼𝗱𝗲𝗿 𝗱𝗶𝗲 𝗘𝗻𝘁𝘄𝗶𝗰𝗸𝗹𝘂𝗻𝗴 𝘃𝗼𝗻 𝗔𝗜 𝗔𝗴𝗲𝗻𝘁𝘀.  📩 Wer den Katalog haben möchte: 𝗘𝗶𝗻𝗳𝗮𝗰𝗵 𝗹𝗶𝗸𝗲𝗻 𝘂𝗻𝗱 \"𝗞𝗜-𝗞𝗮𝘁𝗮𝗹𝗼𝗴\" 𝗸𝗼𝗺𝗺𝗲𝗻𝘁𝗶𝗲𝗿𝗲𝗻 – ich sende ihn euch direkt zu!  hashtag#KünstlicheIntelligenz hashtag#AIReady hashtag#DigitaleTransformation hashtag#KIProjekt hashtag#AIinBusiness hashtag#ChangeManagement hashtag#AIAdoption hashtag#DataStrategy",
+              "type": "string"
+            },
+            {
+              "id": "bb7db008-415d-48cc-9271-48e42839168c",
+              "name": "Post 2",
+              "value": "🚀 In 6 Wochen vom KI‑Neuling zum KI‑Fachreferenten – powered by VWA Rhein‑Neckar, Jürgen Boss & mir 🚀   Die VWA Rhein‑Neckar – seit 100 Jahren ein Garant für praxisnahe Weiterbildung – hat gemeinsam mit Jürgen Boss(Transformationsexperte mit > 20 Jahren Erfahrung) und mir dieses komprimierte 6‑Wochen‑Programm entwickelt.   Unser Ziel: Führungskräften und Mitarbeitern alle Werkzeuge zu liefern, um Künstliche Intelligenz strategisch einzusetzen, Projekte sicher umzusetzen und Teams souverän durch den Wandel zu führen.  Was dich erwartet  🔍 KI‑Basics, die hängen bleiben – verständlich & ohne Tech‑Jargon  🛠️ Relevante Technologien & Tools – direkt im Job nutzbar  📊 KI‑Projektmanagement – von Use‑Case‑Auswahl bis erfolgreichem Roll‑out  🔄 Change & Transformation – Jürgen Boss begleitet dich persönlich durch diesen Teil  Dein Praxis‑Plus  ✅ Interaktive Live‑Sessions & Hands‑on‑Workshops  ✅ Persönliche Begleitung durch erfahrene Praktiker  ✅ Dein eigenes KI‑Projekt, das du während des Programms entwickelst und launchst  🎓 Neugierig? Kostenloses Info‑Webinar (Link in den Kommentaren) 🗓️ Donnerstag, 15. Mai,11:00 Uhr  In 60 Minuten erfährst du:  • Aufbau & Lernformate des Programms  • Sofort umsetzbare Use‑Cases aus echten Projekten  • Erfolgsgeschichten früherer Teilnehmender  🔗 Jetzt kostenfrei anmelden & Platz sichern:  https://lnkd.in/dX8TBxPj  Ich freue mich darauf, dich gemeinsam mit Jürgen auf deiner KI‑Journey zu begleiten!  hashtag#KIFachreferent hashtag#KünstlicheIntelligenz hashtag#Leadership hashtag#DigitalTransformation hashtag#Weiterbildung hashtag#VWA o3",
+              "type": "string"
+            },
+            {
+              "id": "27e0194d-1a96-469e-b90b-48c3a5429b22",
+              "name": "Post 3",
+              "value": "𝗘𝗥𝗣-𝗧𝗿𝗮𝗻𝘀𝗳𝗼𝗿𝗺𝗮𝘁𝗶𝗼𝗻𝗲𝗻 𝗻𝗲𝘂 𝗴𝗲𝗱𝗮𝗰𝗵𝘁: 𝗠𝗶𝘁 𝗚𝗲𝗻𝗔𝗜 𝘀𝗰𝗵𝗻𝗲𝗹𝗹𝗲𝗿, 𝘀𝗰𝗵𝗹𝗮𝗻𝗸𝗲𝗿, 𝘀𝘁𝗿𝗮𝘁𝗲𝗴𝗶𝘀𝗰𝗵𝗲𝗿. 💪  Traditionelle ERP-Projekte gelten als langwierig, teuer und fehleranfällig – doch Generative AI verändert das grundlegend.   Der Aufwand kann bereits heute um 𝟮𝟬–𝟰𝟬 % 𝗿𝗲𝗱𝘂𝘇𝗶𝗲𝗿𝘁 werden, mit deutlich höherer Qualität und Geschwindigkeit. 💨  𝗪𝗮𝘀 𝗯𝗿𝗶𝗻𝗴𝘁 𝗚𝗲𝗻𝗔𝗜 𝗸𝗼𝗻𝗸𝗿𝗲𝘁? • Automatisiertes Requirements Gathering spart bis zu 60 % Zeit • Datenmigration und Code-Entwicklung werden massiv beschleunigt • Testabdeckung steigt, Aufwand sinkt – bei bis zu 70 % Zeitersparnis • Training wird interaktiv & effizient – weniger User-Fehler nach dem Go-live  𝗥𝗲𝗮𝗹𝗲 𝗕𝗲𝗶𝘀𝗽𝗶𝗲𝗹𝗲: BCG nutzte GenAI, um altes ERP-Codewissen in Prozesssprache zu übersetzen – und beschleunigte damit Workshops und Design.  Ein europäischer Energiekonzern automatisierte seine Daten-Mappings und verkürzte die Zeit bis zur produktionsnahen Qualität erheblich.   𝗗𝗲𝗿 𝗴𝗿𝗼𝘀𝘀𝗲 𝗛𝗲𝗯𝗲𝗹: GenAI entfaltet sein volles Potenzial, wenn es strategisch über alle Phasen hinweg eingesetzt wird – nicht als Add-on, sondern als integraler Bestandteil der Transformation. 🏗️  ERP-Anbieter, wie SAP, Oracle and Microsoft arbeiten bereits daran und positionieren das zentral in ihrem Angebotsportfolio.  𝗪𝗲𝗿 𝗵𝗲𝘂𝘁𝗲 𝗮𝘂𝗳 𝗚𝗲𝗻𝗔𝗜 𝘀𝗲𝘁𝘇𝘁, 𝘄𝗶𝗿𝗱 𝗘𝗥𝗣-𝗣𝗿𝗼𝗷𝗲𝗸𝘁𝗲 𝗸𝘂𝗻𝗳𝘁𝗶𝗴 𝗯𝗶𝘀 𝘇𝘂 𝟱𝘅 𝘀𝗰𝗵𝗻𝗲𝗹𝗹𝗲𝗿 𝘂𝗺𝘀𝗲𝘁𝘇𝗲𝗻 – 𝘂𝗻𝗱 𝗱𝗮𝗯𝗲𝗶 𝗲𝗰𝗵𝘁𝗲𝗻 𝗕𝘂𝘀𝗶𝗻𝗲𝘀𝘀 𝗩𝗮𝗹𝘂𝗲 𝗳𝗿𝗲𝗶𝘀𝗲𝘁𝘇𝗲𝗻. ✔️  Quellen: BCG: https://lnkd.in/dZNgQQsx",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -480,
+        -40
+      ],
+      "id": "2da3b79d-eeed-4dde-8478-363c366ba272",
+      "name": "Style"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -180,
+        -40
+      ],
+      "id": "22dec2c3-8a89-4b83-b9d4-4cc3c3aec984",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                6
+              ],
+              "triggerAtHour": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -980,
+        260
+      ],
+      "id": "0607b5af-0391-4ba1-9c5e-b0e69688d10b",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-3-7-sonnet-20250219",
+          "cachedResultName": "Claude 3.7 Sonnet"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        -560,
+        900
+      ],
+      "id": "9bd1bbe3-67ec-45cb-a9a2-243631a63503",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "5LaYwfLSGp6qAvZZ",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "1f7f49cb-3204-80d1-94b5-f7def37771ad",
+          "mode": "list",
+          "cachedResultName": "Weekly Ai News",
+          "cachedResultUrl": "https://www.notion.so/1f7f49cb320480d194b5f7def37771ad"
+        },
+        "title": "={{ $json['Post Title'] }}",
+        "blockUi": {
+          "blockValues": [
+            {
+              "textContent": "={{ $json['First half Post Text'] }}"
+            },
+            {
+              "textContent": "={{ $json['Second half Post Text'] }}"
+            },
+            {
+              "textContent": "Alle Informationen sind aus den folgenden Quellen: Handelsblatt, Tagesschau, Heise Online, t3n, ZDFheute, Ai News, TechCrunch, Top Ai News, Trend Hunter, MIT News"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        1020,
+        760
+      ],
+      "id": "08e0b34c-490d-4be5-bb6b-63049ea64f5c",
+      "name": "Notion1",
+      "credentials": {
+        "notionApi": {
+          "id": "iIpRyKOLAppsIzjE",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "1",
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -300,
+        1060
+      ],
+      "id": "c4162185-5ca3-429e-8aa4-848ae57d6545",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Hey there please format the post",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are a helpful assistant and you will 1. format the post {{ $json.output.Content }}\n2. remove special characters and make it ready to post on linkedin\n3. with this title {{ $json.output.Title }} add the date also as the date today is {{ $today }}\n4. adjust the post within 1500-1700 characters if it exceeds it\n\n\n5. Give me it in this format :\n{\n  \"Title\": \"Post Title\",\t\n\"First Half Text\": \"First Half Post Content\",\n  \"Second Half Text\": \"Second Half Post Content\"\n}\n6. Make sure not to remove important information from it."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        220,
+        480
+      ],
+      "id": "b6842b7c-9358-4d41-a84e-8a5010188330",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-3-5-haiku-20241022",
+          "mode": "list",
+          "cachedResultName": "Claude 3.5 Haiku"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        980
+      ],
+      "id": "73782ed3-dd73-4ece-be3e-02062b9e288b",
+      "name": "Anthropic Chat Model1",
+      "credentials": {
+        "anthropicApi": {
+          "id": "5LaYwfLSGp6qAvZZ",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-3-7-sonnet-20250219",
+          "cachedResultName": "Claude 3.7 Sonnet"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        -40,
+        1060
+      ],
+      "id": "ea360b93-0f7f-4a8b-aa74-7adb4f1ea3a0",
+      "name": "Anthropic Chat Model2",
+      "credentials": {
+        "anthropicApi": {
+          "id": "5LaYwfLSGp6qAvZZ",
+          "name": "Anthropic account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Tavily Extract Top Search": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tavily API Key": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Notion1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tavily Extract Top Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Style": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Tavily API Key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Style",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "79e12fcb-d668-47f5-b4ea-173659f1407b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "979463c3d3c71da5772efc6f79e529574a94998fe3804bf15ea4fd7bdd21f0a2"
+  },
+  "id": "wUlBk3Bk5F9idbi6",
+  "tags": []
+}
