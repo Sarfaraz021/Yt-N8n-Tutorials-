@@ -1,0 +1,331 @@
+{
+  "name": "RAG Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "model": "deepseek-r1-distill-llama-70b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        120
+      ],
+      "id": "d2771795-3e93-4213-bd49-9cadd63484c8",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "MUzAFiUfjJqFuoNa",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "rag",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "ragahmed",
+          "mode": "list",
+          "cachedResultName": "ragahmed"
+        },
+        "includeDocumentMetadata": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        80
+      ],
+      "id": "95202827-aff0-4382-8804-568ac4716b46",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "dxEqwC3YOZUwAsOp",
+          "name": "PineconeApi account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "embed-multilingual-v3.0"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "typeVersion": 1,
+      "position": [
+        120,
+        280
+      ],
+      "id": "63a31700-cda1-47a3-9ee4-3acb17a28dfc",
+      "name": "Embeddings Cohere",
+      "credentials": {
+        "cohereApi": {
+          "id": "zr1OfofxttGNyajA",
+          "name": "CohereApi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful assistant. You have access to a database that contains my data. Whenever needed, access it and respond accordingly. For normal greetings, use your own knowledge. "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -60,
+        -100
+      ],
+      "id": "197ea6e0-d8ab-4fb7-9109-f70532af3ac7",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -480,
+        -100
+      ],
+      "id": "48a09f6c-6c4e-4228-bf0f-2708d8873f33",
+      "name": "When chat message received",
+      "webhookId": "c50e5860-8aed-45dd-b8fb-b64db0f21d3f",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": "deepseek-r1-distill-llama-70b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1160,
+        220
+      ],
+      "id": "7f54da7c-96cd-493a-8396-d8a3de9aaf83",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "MUzAFiUfjJqFuoNa",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "rag",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "ragahmed",
+          "mode": "list",
+          "cachedResultName": "ragahmed"
+        },
+        "includeDocumentMetadata": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        1680,
+        180
+      ],
+      "id": "a8fe7d79-3e11-4d95-9c8a-c285a425278b",
+      "name": "Pinecone Vector Store1",
+      "credentials": {
+        "pineconeApi": {
+          "id": "dxEqwC3YOZUwAsOp",
+          "name": "PineconeApi account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "embed-multilingual-v3.0"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        380
+      ],
+      "id": "02e6fe42-3ce2-42b2-90d6-a88839adaebd",
+      "name": "Embeddings Cohere1",
+      "credentials": {
+        "cohereApi": {
+          "id": "zr1OfofxttGNyajA",
+          "name": "CohereApi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body }}",
+        "options": {
+          "systemMessage": "You are a helpful assistant. You have access to a database that contains my data. Whenever needed, access it and respond accordingly. For normal greetings, use your own knowledge. "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1380,
+        0
+      ],
+      "id": "20ba5cf6-6a49-4386-8f99-ee2282d580d6",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "a371f5b5-2bb0-4b69-9751-343d5454d786",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        860,
+        0
+      ],
+      "id": "ad5e2fda-9b96-4f58-8f04-c2029b030210",
+      "name": "Webhook",
+      "webhookId": "a371f5b5-2bb0-4b69-9751-343d5454d786"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseKey": "={{ $json.output }}"
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2020,
+        0
+      ],
+      "id": "1a95f43b-bbac-42e8-ad06-5ff9ac839099",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "180bd082-67c4-4510-a90b-ba1e55e20bde",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "027c02c3ce712fd8a94620cc7200241aa84087304a736be85f385f6795a099dc"
+  },
+  "id": "4HK0Z8vwG0KFKEI2",
+  "tags": []
+}
